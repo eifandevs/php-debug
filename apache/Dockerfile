@@ -12,8 +12,15 @@ RUN apt-get update && \
     apt-key add ACCC4CF8.asc && \
     apt-get update && \
     apt-get install -y postgresql-client-10 nano libicu-dev libpq-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libmcrypt-dev && \
-    docker-php-ext-install pdo pdo_pgsql intl mbstring && \
+    docker-php-ext-install pdo pdo_pgsql pgsql intl mbstring && \
     pecl install xdebug
+
+# ssl
+RUN a2enmod ssl && a2ensite default-ssl
+
+# cert
+COPY ./keys/server-crt.pem /etc/ssl/certs/server-crt.pem
+COPY ./keys/server-privatekey.pem /etc/ssl/private/server-privatekey.pem
 
 WORKDIR /var/www
 
